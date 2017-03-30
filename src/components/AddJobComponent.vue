@@ -17,12 +17,11 @@ export default {
 	},
 	methods: {
 	  	addJob () {
-			var text
-			text = this.newJob.trim()
+			let text = this.newJob.trim();
 			if (text) {
-			  	this.$emit('add', this.newJob)
-			  	this.newJob = ''
-			  	this.$store.dispatch('updateJobs', this.id)
+			  	this.$emit('add', this.newJob);
+			  	this.newJob = '';
+			  	this.$store.dispatch('updateJobs', this.id);
 			}
 	  	}
 	}
