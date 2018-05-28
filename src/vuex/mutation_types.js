@@ -1,4 +1,0 @@
-export const CHANGE_TITLE = 'CHANGE_TITLE'
-export const POPULATE_JOB_LISTS = 'POPULATE_JOB_LISTS'
-export const ADD_JOB_LIST = 'ADD_JOB_LIST'
-export const DELETE_JOB_LIST = 'DELETE_JOB_LIST'
