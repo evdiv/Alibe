@@ -1,27 +1,23 @@
 <template>
 	<div class="input-group">
-		<input type="text" @keyup.enter="addJob" v-model="newJob" placeholder="add job" class="form-control">
-		<span class="input-group-btn">
-		  	<button @click="addJob" class="btn btn-default" type="button">Add!</button>
-		</span>
+		<input type="text" v-model="jobTitle" placeholder="add job title" @keyup.enter="addJob">
+		<button @click="addJob">Add!</button>
 	</div>
 </template>
 
 <script>
 export default {
-	props: ['id'],
 	data () {
 	  	return {
-			newJob: ''
+			jobTitle: ''
 	  	}
 	},
 	methods: {
 	  	addJob () {
-			let text = this.newJob.trim();
-			if (text) {
-			  	this.$emit('add', this.newJob);
-			  	this.newJob = '';
-			  	this.$store.dispatch('updateJobs', this.id);
+			let jobTitle = this.jobTitle.trim();
+			if (jobTitle) {
+				this.$store.commit('addJob', this.jobTitle)
+				  this.jobTitle = '';
 			}
 	  	}
 	}
