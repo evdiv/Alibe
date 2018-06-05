@@ -3,12 +3,12 @@ import 'firebase/firestore'
 
 // firebase init goes here
 const config = {
-  apiKey: '',
-  authDomain: '',
-  databaseURL: '',
-  projectId: '',
-  storageBucket: '',
-  messagingSenderId: ''
+		apiKey: '',
+		authDomain: '',
+		databaseURL: '',
+		projectId: '',
+		storageBucket: '',
+		messagingSenderId: ''
 }
 firebase.initializeApp(config)
 
@@ -19,7 +19,7 @@ const currentUser = auth.currentUser
 
 // date issue fix according to firebase
 const settings = {
-  timestampsInSnapshots: true
+	timestampsInSnapshots: true
 }
 db.settings(settings)
 
@@ -30,11 +30,11 @@ const commentsCollection = db.collection('comments')
 const likesCollection = db.collection('likes')
 
 export {
-  db,
-  auth,
-  currentUser,
-  usersCollection,
-  postsCollection,
-  commentsCollection,
-  likesCollection
+	db,
+	auth,
+	currentUser,
+	usersCollection,
+	postsCollection,
+	commentsCollection,
+	likesCollection
 }
