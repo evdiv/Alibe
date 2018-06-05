@@ -1,9 +1,18 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/add-job">Add Job</router-link>
-    </div>
+    <Navigation v-if="currentUser"></Navigation>
     <router-view/>
   </div>
 </template>
+
+<script>
+  import { mapState } from 'vuex'
+  import Navigation from './components/navigation.vue'
+
+  export default {
+    components: { Navigation },
+    computed: {
+      ...mapState(['currentUser'])
+    }
+  }
+</script>

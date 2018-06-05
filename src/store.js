@@ -5,32 +5,45 @@ const fb = require('./firebaseConfig.js')
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+// handle page reload
+fb.auth.onAuthStateChanged(user => {
+  if (user) {
+    store.commit('setCurrentUser', user)
+    store.dispatch('fetchUserProfile')
+  }
+})
+
+export const store = new Vuex.Store({
   state: {
     currentUser: null,
     userProfile: {},
     jobs: [],
     employees: []
   },
+
   mutations: {
     addJob (state, jobTitle) {
       this.state.jobs.push({title: jobTitle})
     },
-    setCurrentUser(state, val) {
+    setCurrentUser (state, val) {
       state.currentUser = val
     },
-    setUserProfile(state, val) {
-        state.userProfile = val
+    setUserProfile (state, val) {
+      state.userProfile = val
     }
   },
 
   actions: {
-    fetchUserProfile({ commit, state }) {
+    fetchUserProfile ({ commit, state }) {
       fb.usersCollection.doc(state.currentUser.uid).get().then(res => {
-          commit('setUserProfile', res.data())
+        commit('setUserProfile', res.data())
       }).catch(err => {
-          console.log(err)
+        console.log(err)
       })
+    },
+    clearData ({commit}) {
+      commit('setCurrentUser', null)
+      commit('setUserProfile', {})
     },
     getActiveJobs () {
       // Axios.get('api/jobs')
