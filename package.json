@@ -8,18 +8,20 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@firebase/firestore": "^0.8.1",
     "axios": "^0.18.0",
-    "vue": "^2.5.16",
+    "firebase": "^5.5.1",
+    "vue": "^2.5.17",
     "vue-router": "^3.0.1",
-    "vuetify": "^1.0.18",
+    "vuetify": "^1.2.4",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-beta.11",
-    "@vue/cli-plugin-eslint": "^3.0.0-beta.11",
-    "@vue/cli-service": "^3.0.0-beta.11",
-    "@vue/eslint-config-standard": "^3.0.0-beta.11",
-    "vue-template-compiler": "^2.5.16"
+    "@vue/cli-plugin-babel": "^3.0.3",
+    "@vue/cli-plugin-eslint": "^3.0.3",
+    "@vue/cli-service": "^3.0.3",
+    "@vue/eslint-config-standard": "^3.0.3",
+    "vue-template-compiler": "^2.5.17"
   },
   "eslintConfig": {
     "root": true,
@@ -44,5 +46,17 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "main": "babel.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evdiv/Alibe.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/evdiv/Alibe/issues"
+  },
+  "homepage": "https://github.com/evdiv/Alibe#readme",
+  "description": ""
 }
