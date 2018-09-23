@@ -256,7 +256,7 @@
                         offer.id = doc.id
                         offersArray.push(offer)
                     })
-                    this.joboffers = offersArray
+                    this.jobOffers = offersArray
 
                 }).catch(err => {
                     console.log(err)
