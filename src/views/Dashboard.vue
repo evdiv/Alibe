@@ -1,4 +1,5 @@
 <template>
+
     <div id="dashboard">
         <section>
             <div class="col1">
