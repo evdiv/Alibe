@@ -31,7 +31,7 @@
                     <h1>Get Started</h1>
 
                     <label for="name">Name</label>
-                    <input v-model.trim="signupForm.name" type="text" placeholder="Savvy Apps" id="name" />
+                    <input v-model.trim="signupForm.name" type="text" placeholder="Your Name" id="name" />
 
                     <label for="title">Title</label>
                     <input v-model.trim="signupForm.title" type="text" placeholder="Company" id="title" />
@@ -121,7 +121,7 @@
             login() {
                 this.performingRequest = true
                 fb.auth.signInWithEmailAndPassword(this.loginForm.email, this.loginForm.password).then(user => {
-                    this.$store.commit('setCurrentUser', user)
+                    this.$store.commit('setCurrentUser', user.user)
                     this.$store.dispatch('fetchUserProfile')
                     this.performingRequest = false
                     this.$router.push('/dashboard')
@@ -134,7 +134,7 @@
             signup() {
                 this.performingRequest = true
                 fb.auth.createUserWithEmailAndPassword(this.signupForm.email, this.signupForm.password).then(user => {
-                    this.$store.commit('setCurrentUser', user)
+                    this.$store.commit('setCurrentUser', user.user)
                     // create user obj
                     fb.usersCollection.doc(user.uid).set({
                         name: this.signupForm.name,

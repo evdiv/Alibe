@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import Axios from 'axios'
 const fb = require('./firebaseConfig.js')
 
 Vue.use(Vuex)
@@ -10,6 +9,18 @@ fb.auth.onAuthStateChanged(user => {
   if (user) {
     store.commit('setCurrentUser', user)
     store.dispatch('fetchUserProfile')
+
+    fb.jobsCollection.orderBy('createdOn', 'desc').onSnapshot(querySnapshot => {
+      let jobsArray = []
+
+      querySnapshot.forEach(doc => {
+          let job = doc.data()
+          job.id = doc.id
+          jobsArray.push(job)
+      })
+
+      store.commit('setJobs', jobsArray)
+    })
   }
 })
 
@@ -17,19 +28,21 @@ export const store = new Vuex.Store({
   state: {
     currentUser: null,
     userProfile: {},
-    jobs: [],
-    employees: []
+    jobs: []
   },
 
   mutations: {
-    addJob (state, jobTitle) {
-      this.state.jobs.push({title: jobTitle})
+    addJob (state, val) {
+      state.jobs.push(val)
     },
     setCurrentUser (state, val) {
       state.currentUser = val
     },
     setUserProfile (state, val) {
       state.userProfile = val
+    }, 
+    setJobs(state, val) {
+      state.jobs = val
     }
   },
 
@@ -44,6 +57,7 @@ export const store = new Vuex.Store({
     clearData ({commit}) {
       commit('setCurrentUser', null)
       commit('setUserProfile', {})
+      commit('setJobs', null)
     },
     getActiveJobs () {
       // Axios.get('api/jobs')
@@ -52,10 +66,6 @@ export const store = new Vuex.Store({
     postJob (job) {
       // Axios.post('api/job', this.state.newJob)
       this.state.jobs.push(job)
-    },
-    postEmployee () {
-      Axios.post('api/employee', this.state.newEmployee)
     }
-
   }
 })
