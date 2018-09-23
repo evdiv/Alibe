@@ -11,15 +11,28 @@ fb.auth.onAuthStateChanged(user => {
     store.dispatch('fetchUserProfile')
 
     fb.jobsCollection.orderBy('createdOn', 'desc').onSnapshot(querySnapshot => {
-      let jobsArray = []
+      let createdByCurrentUser
+      if (querySnapshot.docs.length) {
+          createdByCurrentUser = store.state.currentUser.uid == querySnapshot.docChanges[0].doc.data().userId ? true : false
+      }
+      
+      if (querySnapshot.docChanges.length !== querySnapshot.docs.length
+        && querySnapshot.docChanges[0].type == 'added' && !createdByCurrentUser) {
 
-      querySnapshot.forEach(doc => {
-          let job = doc.data()
-          job.id = doc.id
-          jobsArray.push(job)
-      })
+        let job = querySnapshot.docChanges[0].doc.data()
+        job.id = querySnapshot.docChanges[0].doc.id
 
-      store.commit('setJobs', jobsArray)
+        store.commit('setHiddenJobs', post)
+    } else {
+        let jobsArray = []
+
+        querySnapshot.forEach(doc => {
+            let post = doc.data()
+            job.id = doc.id
+            jobsArray.push(post)
+        })
+
+        store.commit('setJobs', jobsArray)
     })
   }
 })
