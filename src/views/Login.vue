@@ -15,10 +15,10 @@
                     <h1>Welcome Back</h1>
 
                     <label for="email1">Email</label>
-                    <input v-model.trim="loginForm.email" type="text" placeholder="you@email.com" id="email1" />
+                    <input v-model.trim="loginForm.email" type="text" placeholder="you@email.com"/>
 
                     <label for="password1">Password</label>
-                    <input v-model.trim="loginForm.password" type="password" placeholder="******" id="password1" />
+                    <input v-model.trim="loginForm.password" type="password" placeholder="******" />
 
                     <button @click="login" class="button">Log In</button>
 
@@ -125,6 +125,7 @@
                     this.$store.dispatch('fetchUserProfile')
                     this.performingRequest = false
                     this.$router.push('/dashboard')
+
                 }).catch(err => {
                     console.log(err)
                     this.performingRequest = false

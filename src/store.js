@@ -10,6 +10,11 @@ fb.auth.onAuthStateChanged(user => {
     store.commit('setCurrentUser', user)
     store.dispatch('fetchUserProfile')
 
+    fb.usersCollection.doc(user.uid).onSnapshot(doc => {
+      store.commit('setUserProfile', doc.data())
+    })
+    
+
     fb.jobsCollection.orderBy('createdOn', 'desc').onSnapshot(querySnapshot => {
       let createdByCurrentUser
       if (querySnapshot.docs.length) {
@@ -23,7 +28,7 @@ fb.auth.onAuthStateChanged(user => {
         job.id = querySnapshot.docChanges[0].doc.id
 
         store.commit('setHiddenJobs', post)
-    } else {
+      } else {
         let jobsArray = []
 
         querySnapshot.forEach(doc => {
@@ -33,77 +38,73 @@ fb.auth.onAuthStateChanged(user => {
         })
 
         store.commit('setJobs', jobsArray)
+      }
     })
   }
 })
 
+
 export const store = new Vuex.Store({
-  state: {
-    currentUser: null,
-    userProfile: {},
-    jobs: []
-  },
+    state: {
+      	currentUser: null,
+      	userProfile: {},
+      	jobs: []
+    },
 
-  mutations: {
-    addJob (state, val) {
-      state.jobs.push(val)
-    },
-    setCurrentUser (state, val) {
-      state.currentUser = val
-    },
-    setUserProfile (state, val) {
-      state.userProfile = val
-    }, 
-    setJobs(state, val) {
-      state.jobs = val
-    }
-  },
+	mutations: {
+		addJob (state, val) {
+			state.jobs.push(val)
+		},
+		setCurrentUser (state, val) {
+			state.currentUser = val
+		},
+		setUserProfile (state, val) {
+			state.userProfile = val
+		}, 
+		setJobs(state, val) {
+			state.jobs = val
+		}
+	},
 
-  actions: {
-    fetchUserProfile ({ commit, state }) {
-      fb.usersCollection.doc(state.currentUser.uid).get().then(res => {
-        commit('setUserProfile', res.data())
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    clearData ({commit}) {
-      commit('setCurrentUser', null)
-      commit('setUserProfile', {})
-      commit('setJobs', null)
-    },
-    getActiveJobs () {
-      // Axios.get('api/jobs')
-      this.state.jobs = [{ title: 'First Job' }, { title: 'Second Job' }, { title: 'Third Job' }]
-    },
-    postJob (job) {
-      // Axios.post('api/job', this.state.newJob)
-      this.state.jobs.push(job)
-    },
-    updateProfile({ commit, state }, data) {
-      let name = data.name
-      let title = data.title
-  
-      fb.usersCollection.doc(state.currentUser.uid).update({ name, title }).then(user => {
-          // update all posts by user to reflect new name
-          fb.postsCollection.where('userId', '==', state.currentUser.uid).get().then(docs => {
-              docs.forEach(doc => {
-                  fb.postsCollection.doc(doc.id).update({
-                      userName: name
-                  })
-              })
-          })
-          // update all comments by user to reflect new name
-          fb.commentsCollection.where('userId', '==', state.currentUser.uid).get().then(docs => {
-              docs.forEach(doc => {
-                  fb.commentsCollection.doc(doc.id).update({
-                      userName: name
-                  })
-              })
-          })
-      }).catch(err => {
-          console.log(err)
-      })
-    }
-  }
+	actions: {
+		fetchUserProfile ({ commit, state }) {
+			fb.usersCollection.doc(state.currentUser.uid).get().then(res => {
+				console.log(state.currentUser.uid);
+				console.log(res);
+				commit('setUserProfile', res.data())
+			}).catch(err => {
+				console.log(err)
+			})
+		},
+		clearData ({commit}) {
+			commit('setCurrentUser', null)
+			commit('setUserProfile', {})
+			commit('setJobs', null)
+		},
+		updateProfile({ commit, state }, data) {
+			let name = data.name
+			let title = data.title
+	
+			fb.usersCollection.doc(state.currentUser.uid).update({ name, title }).then(user => {
+				// update all posts by user to reflect new name
+				fb.postsCollection.where('userId', '==', state.currentUser.uid).get().then(docs => {
+					docs.forEach(doc => {
+						fb.postsCollection.doc(doc.id).update({
+							userName: name
+						})
+					})
+				})
+				// update all comments by user to reflect new name
+				fb.commentsCollection.where('userId', '==', state.currentUser.uid).get().then(docs => {
+					docs.forEach(doc => {
+						fb.commentsCollection.doc(doc.id).update({
+							userName: name
+						})
+					})
+				})
+			}).catch(err => {
+				console.log(err)
+			})
+		}
+	}
 })
