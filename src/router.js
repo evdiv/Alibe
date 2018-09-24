@@ -2,8 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import firebase from 'firebase'
 
-import Home from './views/Home.vue'
-import AddJob from './views/AddJob.vue'
 import Login from './views/Login.vue'
 import Dashboard from './views/Dashboard.vue'
 import Settings from './views/Settings.vue'
@@ -34,14 +32,6 @@ const router = new Router({
       path: '/settings',
       name: 'settings',
       component: Settings,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      path: '/add-job',
-      name: 'addJob',
-      component: AddJob,
       meta: {
         requiresAuth: true
       }

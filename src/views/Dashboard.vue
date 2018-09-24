@@ -1,5 +1,4 @@
 <template>
-
     <div id="dashboard">
         <section>
             <div class="col1">
@@ -10,20 +9,13 @@
                         <p>create a job</p>
                         <form @submit.prevent>
                             <textarea v-model.trim="job.content"></textarea>
-                            <button @click="createJob" :disabled="job.content == ''" class="button">Add</button>
+                            <button @click="addJob" :disabled="job.content == ''" class="button">Add Job</button>
                         </form>
                     </div>
                 </div>
             </div>
             <div class="col2">
-                <transition name="fade">
-                    <div v-if="hiddenJobs.length" @click="showNewJobs" class="hidden-posts">
-                        <p>
-                            Click to show <span class="new-jobs">{{ hiddenJobs.length }}</span>
-                            new <span v-if="hiddenJobs.length > 1">jobs</span><span v-else>job</span>
-                        </p>
-                    </div>
-                </transition>
+
                 <div v-if="jobs.length">
                     <div v-for="job in jobs" :key=job.id class="job">
                         <h5>{{ job.userName }}</h5>
@@ -36,13 +28,14 @@
                         </ul>
                     </div>
                 </div>
+
                 <div v-else>
-                    <p class="no-results">There are currently no jobs</p>
+                    <p class="no-results">There are currently no available jobs</p>
                 </div>
             </div>
         </section>
 
-        <!-- comment modal -->
+        <!-- Add a Comment modal -->
         <transition name="fade">
             <div v-if="showCommentModal" class="c-modal">
                 <div class="c-container">
@@ -57,7 +50,7 @@
         </transition>
 
         
-        <!-- offer modal -->
+        <!-- Add an Offer modal -->
         <transition name="fade">
             <div v-if="showOfferModal" class="o-modal">
                 <div class="o-container">
@@ -71,7 +64,9 @@
             </div>
         </transition>
 
-        <!-- post modal -->
+
+
+        <!-- full job modal -->
         <transition name="fade">
             <div v-if="showJobModal" class="p-modal">
                 <div class="p-container">
@@ -82,20 +77,19 @@
                         <p>{{ fullJob.content }}</p>
                         <ul>
                             <li><a>comments {{ fullJob.comments }}</a></li>
-                            <li><a>comments {{ fullJob.offers }}</a></li>
-                            <li><a>likes {{ fullJob.likes }}</a></li>
+                            <li><a>offers {{ fullJob.offers }}</a></li>
                         </ul>
                     </div>
-                    <div v-show="jobComments.length" class="comments">
-                        <div v-for="comment in jobComments" class="comment">
+                    <div v-show="comments.length">
+                        <div v-for="comment in comments" class="comment">
                             <p>{{ comment.userName }}</p>
                             <span>{{ comment.createdOn | formatDate }}</span>
                             <p>{{ comment.content }}</p>
                         </div>
                     </div>
 
-                    <div v-show="jobOffers.length" class="offers">
-                        <div v-for="offer in jobOffers" class="offer">
+                    <div v-show="offers.length" class="offers">
+                        <div v-for="offer in offers" class="offer">
                             <p>{{ offer.userName }}</p>
                             <span>{{ offer.createdOn | formatDate }}</span>
                             <p>{{ offer.content }}</p>
@@ -112,6 +106,7 @@
     import { mapState } from 'vuex'
     import moment from 'moment'
     const fb = require('../firebaseConfig.js')
+
     export default {
         data() {
             return {
@@ -128,48 +123,34 @@
                 showOfferModal: false,
                 showJobModal: false,
                 fullJob: {},
-                jobComments: []
+                comments: [],
+                offers:[]
             }
         },
         computed: {
-            ...mapState(['userProfile', 'currentUser', 'jobs', 'hiddenJobs'])
+            ...mapState(['userProfile', 'currentUser', 'jobs'])
         },
         methods: {
-            createJob() {
+
+            addJob() {
                 fb.jobsCollection.add({
                     createdOn: new Date(),
                     content: this.job.content,
                     userId: this.currentUser.uid,
                     userName: this.userProfile.name,
                     comments: 0,
-                    likes: 0
+                    offers: 0
                 }).then(ref => {
                     this.job.content = ''
                 }).catch(err => {
                     console.log(err)
                 })
             },
-            showNewJobs() {
-                let updatedJobsArray = this.hiddenJobs.concat(this.jobs)
-                // clear hiddenPosts array and update posts array
-                this.$store.commit('setHiddenJobs', null)
-                this.$store.commit('setJobs', updatedJobsArray)
-            },
-            openCommentModal(job) {
-                this.comment.jobId = job.id
-                this.comment.userId = job.userId
-                this.comment.jobComments = job.comments
-                this.showCommentModal = true
-            },
-            closeCommentModal() {
-                this.comment.jobId = ''
-                this.comment.userId = ''
-                this.comment.content = ''
-                this.showCommentModal = false
-            },
+
             addComment() {
                 let jobId = this.comment.jobId
                 let jobComments = this.comment.jobComments
+
                 fb.commentsCollection.add({
                     createdOn: new Date(),
                     content: this.comment.content,
@@ -186,6 +167,40 @@
                     console.log(err)
                 })
             },
+
+            addOffer() {
+                let jobId = this.offer.jobId
+                let jobOffers = this.offer.jobOffers
+                fb.offersCollection.add({
+                    createdOn: new Date(),
+                    content: this.offer.content,
+                    jobId: jobId,
+                    userId: this.currentUser.uid,
+                    userName: this.userProfile.name
+                }).then(doc => {
+                    fb.jobsCollection.doc(jobId).update({
+                        offers: jobOffers + 1
+                    }).then(() => {
+                        this.closeOfferModal()
+                    })
+                }).catch(err => {
+                    console.log(err)
+                })
+            },
+
+            openCommentModal(job) {
+                this.comment.jobId = job.id
+                this.comment.userId = job.userId
+                this.comment.jobComments = job.comments
+                this.showCommentModal = true
+            },
+            closeCommentModal() {
+                this.comment.jobId = ''
+                this.comment.userId = ''
+                this.comment.content = ''
+                this.showCommentModal = false
+            },
+
             openOfferModal(job) {
                 this.offer.jobId = job.id
                 this.offer.userId = job.userId
@@ -198,43 +213,7 @@
                 this.offer.content = ''
                 this.showofferModal = false
             },
-            addOffer() {
-                let jobId = this.offer.jobId
-                let jobOffers = this.offer.jobOffers
-                fb.offersCollection.add({
-                    createdOn: new Date(),
-                    content: this.offer.content,
-                    jobId: jobId,
-                    userId: this.currentUser.uid,
-                    userName: this.userProfile.name
-                }).then(doc => {
-                    fb.jobsCollection.doc(jobId).update({
-                        comments: jobOffers + 1
-                    }).then(() => {
-                        this.closeOfferModal()
-                    })
-                }).catch(err => {
-                    console.log(err)
-                })
-            },
 
-            likeJob(jobId, jobLikes) {
-                let docId = `${this.currentUser.uid}_${jobId}`
-                fb.likesCollection.doc(docId).get().then(doc => {
-                    if (doc.exists) { return }
-                    fb.likesCollection.doc(docId).set({
-                        jobId: jobId,
-                        userId: this.currentUser.uid
-                    }).then(() => {
-                        // update job likes
-                        fb.jobsCollection.doc(jobId).update({
-                            likes: jobLikes + 1
-                        })
-                    })
-                }).catch(err => {
-                    console.log(err)
-                })
-            },
             viewJob(job) {
                 fb.commentsCollection.where('jobId', '==', job.id).get().then(docs => {
                     let commentsArray = []
