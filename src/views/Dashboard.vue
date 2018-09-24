@@ -1,21 +1,23 @@
 <template>
     <div id="dashboard">
         <section>
+
             <div class="col1">
                 <div class="profile">
-                    <h5>{{ userProfile.name }}</h5>
-                    <p>{{ userProfile.title }}</p>
+                    <h5>{{ userProfile.name }} - {{ userProfile.title }}</h5>
+                    
                     <div class="create-job">
-                        <p>create a job</p>
                         <form @submit.prevent>
                             <textarea v-model.trim="job.content"></textarea>
                             <button @click="addJob" :disabled="job.content == ''" class="button">Add Job</button>
                         </form>
                     </div>
+
                 </div>
             </div>
-            <div class="col2">
 
+            <!-- Jobs listing -->
+            <div class="col2">
                 <div v-if="jobs.length">
                     <div v-for="job in jobs" :key=job.id class="job">
                         <h5>{{ job.userName }}</h5>
@@ -35,12 +37,14 @@
             </div>
         </section>
 
+
+
         <!-- Add a Comment modal -->
         <transition name="fade">
             <div v-if="showCommentModal" class="c-modal">
                 <div class="c-container">
                     <a @click="closeCommentModal">X</a>
-                    <p>add a comment</p>
+
                     <form @submit.prevent>
                         <textarea v-model.trim="comment.content"></textarea>
                         <button @click="addComment" :disabled="comment.content == ''" class="button">add comment</button>
@@ -55,7 +59,7 @@
             <div v-if="showOfferModal" class="o-modal">
                 <div class="o-container">
                     <a @click="closeOfferModal">X</a>
-                    <p>add an offer</p>
+
                     <form @submit.prevent>
                         <textarea v-model.trim="offer.content"></textarea>
                         <button @click="addOffer" :disabled="offer.content == ''" class="button">add offer</button>
@@ -150,6 +154,8 @@
             addComment() {
                 let jobId = this.comment.jobId
                 let jobComments = this.comment.jobComments
+
+                console.log(jobId);
 
                 fb.commentsCollection.add({
                     createdOn: new Date(),
