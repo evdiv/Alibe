@@ -21,9 +21,9 @@ fb.auth.onAuthStateChanged(user => {
 			})
 			store.commit('setJobs', jobs)
 		})
+
 	}
 })
-
 
 export const store = new Vuex.Store({
 	state: {

@@ -1,18 +1,15 @@
 <template>
-    <header>
-        <section>
-            <div class="col1">
-                <a href='/'><h3>Alibe</h3></a>
-                <ul class="inline">
-                    <li><a href='/dashboard'>Dashboard</a></li>
-                    <li><a href='/add-job'>Add Job</a></li>
-                    <li><a href='/settings'>Settings</a></li>
-                    <li><a @click="logout">logout</a></li>
-                </ul>
-            </div>
-        </section>
-    </header>
+    <b-container>
+        <b-nav>
+            <b-nav-item><a href='/'><h3>Alibe</h3></a></b-nav-item>
+            <b-nav-item><a href='/dashboard'>Dashboard</a></b-nav-item>
+            <b-nav-item><a href='/settings'>Settings</a></b-nav-item>
+            <b-nav-item><a @click="logout">logout</a></b-nav-item>
+        </b-nav>
+    </b-container>
 </template>
+
+
 
 <script>
     const fb = require('../firebaseConfig.js')

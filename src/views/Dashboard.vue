@@ -1,41 +1,46 @@
 <template>
-    <div id="dashboard">
-        <section>
+    <b-container>
+        <b-row>
+            <b-col cols='5'>
+                <h4>{{ userProfile.name }} - {{ userProfile.title }}</h4>
+                
+                <form @submit.prevent>
+                    <b-form-textarea v-model.trim="job.content"
+                                    placeholder="Enter job description"
+                                    :rows="3"
+                                    :max-rows="6">
+                    </b-form-textarea>
 
-            <div class="col1">
-                <div class="profile">
-                    <h5>{{ userProfile.name }} - {{ userProfile.title }}</h5>
-                    
-                    <div class="create-job">
-                        <form @submit.prevent>
-                            <textarea v-model.trim="job.content"></textarea>
-                            <button @click="addJob" :disabled="job.content == ''" class="button">Add Job</button>
-                        </form>
-                    </div>
+                    <b-button variant="success"
+                            @click="addJob" 
+                            :disabled="job.content == ''">Add Job
+                    </b-button>
+                </form>
+            </b-col>
 
-                </div>
-            </div>
 
-            <!-- Jobs listing -->
-            <div class="col2">
+            <b-col cols='7'>
                 <div v-if="jobs.length">
+                    <b-table striped hover :items="jobs" :fields="fields"></b-table>
+
+
                     <div v-for="job in jobs" :key=job.id class="job">
                         <h5>{{ job.userName }}</h5>
                         <span>{{ job.createdOn | formatDate }}</span>
                         <p>{{ job.content | trimLength }}</p>
                         <ul>
-                            <li><a @click="openCommentModal(job)">comments {{ job.comments }}</a></li>
-                            <li><a @click="openOfferModal(job)">offers {{ job.offers }}</a></li>
+                            <li><a @click="openCommentModal(job)">comments {{ job.comments }} (add)</a></li>
+                            <li><a @click="openOfferModal(job)">offers {{ job.offers }} (add)</a></li>
                             <li><a @click="viewJob(job)">view full job</a></li>
                         </ul>
                     </div>
                 </div>
 
                 <div v-else>
-                    <p class="no-results">There are currently no available jobs</p>
+                    <b-alert show variant="danger">There are currently no available jobs</b-alert>
                 </div>
-            </div>
-        </section>
+            </b-col>
+        </b-row>
 
 
 
@@ -103,7 +108,7 @@
                 </div>
             </div>
         </transition>
-    </div>
+    </b-container>
 </template>
 
 <script>
@@ -114,6 +119,7 @@
     export default {
         data() {
             return {
+                fields: [ 'userName', 'content', 'comments', 'offers' ],
                 job: {
                     content: ''
                 },
@@ -122,6 +128,12 @@
                     userId: '',
                     content: '',
                     jobComments: 0
+                },
+                offer: {
+                    jobId: '',
+                    userId: '',
+                    content: '',
+                    jobOffers: 0                    
                 },
                 showCommentModal: false,
                 showOfferModal: false,
@@ -154,8 +166,6 @@
             addComment() {
                 let jobId = this.comment.jobId
                 let jobComments = this.comment.jobComments
-
-                console.log(jobId);
 
                 fb.commentsCollection.add({
                     createdOn: new Date(),
@@ -200,6 +210,7 @@
                 this.comment.jobComments = job.comments
                 this.showCommentModal = true
             },
+
             closeCommentModal() {
                 this.comment.jobId = ''
                 this.comment.userId = ''
@@ -213,6 +224,7 @@
                 this.offer.jobOffers = job.offers
                 this.showOfferModal = true
             },
+
             closeOfferModal() {
                 this.offer.jobId = ''
                 this.offer.userId = ''
@@ -222,27 +234,21 @@
 
             viewJob(job) {
                 fb.commentsCollection.where('jobId', '==', job.id).get().then(docs => {
-                    let commentsArray = []
                     docs.forEach(doc => {
                         let comment = doc.data()
                         comment.id = doc.id
-                        commentsArray.push(comment)
+                        this.comments.push(comment)
                     })
-                    this.jobComments = commentsArray
-
                 }).catch(err => {
                     console.log(err)
                 })
 
                fb.offersCollection.where('jobId', '==', job.id).get().then(docs => {
-                    let offersArray = []
                     docs.forEach(doc => {
                         let offer = doc.data()
                         offer.id = doc.id
-                        offersArray.push(offer)
+                        this.offers.push(offer)
                     })
-                    this.jobOffers = offersArray
-
                 }).catch(err => {
                     console.log(err)
                 })
@@ -250,11 +256,13 @@
                 this.fullJob = job
                 this.showJobModal = true                
             },
+
             closeJobModal() {
                 this.jobComments = []
                 this.showJobModal = false
             }
         },
+
         filters: {
             formatDate(val) {
                 if (!val) { return '-' }

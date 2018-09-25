@@ -1,34 +1,60 @@
 <template>
-    <div id="login">
+    <b-container>
+
         <transition name="fade">
             <div v-if="performingRequest" class="loading">
                 <p>Loading...</p>
             </div>
         </transition>
-        <section>
-            <div class="col1">
+
+        <b-row>
+            <b-col>
                 <h1>Alibe</h1>
                 <p>Welcome to the Alibe app powered by Vue.js and Firebase.</p>
-            </div>
-            <div class="col2" :class="{ 'signup-form': !showLoginForm && !showForgotPassword }">
+            </b-col>
+        </b-row>
+
+        <b-row>
+            <b-col>
                 <form v-if="showLoginForm" @submit.prevent>
-                    <h1>Welcome Back</h1>
+                    <h3>Welcome Back</h3>
 
-                    <label for="email1">Email</label>
-                    <input v-model.trim="loginForm.email" type="text" placeholder="you@email.com"/>
+                    <b-row>
+                        <b-col sm="2"><label for="email">Email</label></b-col>
+                        <b-col sm="3">
+                            <b-form-input type="text" 
+                                        v-model.trim="loginForm.email"
+                                        placeholder="your@email.com"></b-form-input>
+                        </b-col>
+                    </b-row>
 
-                    <label for="password1">Password</label>
-                    <input v-model.trim="loginForm.password" type="password" placeholder="******" />
 
-                    <button @click="login" class="button">Log In</button>
+                    <b-row>
+                        <b-col sm="2"><label for="password">Password</label></b-col>
+                        <b-col sm="3">
+                            <b-form-input type="password" 
+                                        v-model.trim="loginForm.password"
+                                        placeholder="********"></b-form-input>
+                        </b-col>
+                    </b-row>
 
-                    <div class="extras">
-                        <a @click="togglePasswordReset">Forgot Password</a>
-                        <a @click="toggleForm">Create an Account</a>
-                    </div>
+                    <b-row>
+                        <b-col sm="5" class="text-right">
+                            <b-button variant="success" @click="login">Log In</b-button>
+                        </b-col>
+                    </b-row>
+
+                    
+                    <b-row>
+                        <b-col>
+                            <b-button size="sm" variant="link" @click="togglePasswordReset">Forgot Password</b-button>
+                            <b-button size="sm" variant="link" @click="toggleForm">Create an Account</b-button>
+                        </b-col>
+                    </b-row>
+
                 </form>
                 <form v-if="!showLoginForm && !showForgotPassword" @submit.prevent>
-                    <h1>Get Started</h1>
+                    <h3>Get Started</h3>
 
                     <label for="name">Name</label>
                     <input v-model.trim="signupForm.name" type="text" placeholder="Your Name" id="name" />
@@ -50,7 +76,7 @@
                 </form>
                 <form v-if="showForgotPassword" @submit.prevent class="password-reset">
                     <div v-if="!passwordResetSuccess">
-                        <h1>Reset Password</h1>
+                        <h3>Reset Password</h3>
                         <p>We will send you an email to reset your password</p>
 
                         <label for="email3">Email</label>
@@ -63,7 +89,7 @@
                         </div>
                     </div>
                     <div v-else>
-                        <h1>Email Sent</h1>
+                        <h3>Email Sent</h3>
                         <p>check your email for a link to reset your password</p>
                         <button @click="togglePasswordReset" class="button">Back to login</button>
                     </div>
@@ -73,9 +99,10 @@
                         <p>{{ errorMsg }}</p>
                     </div>
                 </transition>
-            </div>
-        </section>
-    </div>
+            </b-col>
+        </b-row>
+
+    </b-container>
 </template>
 
 <script>
