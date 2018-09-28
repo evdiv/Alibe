@@ -18,7 +18,6 @@
                 </form>
             </b-col>
 
-
             <b-col cols='7'>
                 <div v-if="jobs.length">
                     <b-table striped hover :items="jobs" :fields="fields"></b-table>
