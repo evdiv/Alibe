@@ -1,8 +1,12 @@
 <template>
-  <div id="app">
-    <Navigation v-if="currentUser"></Navigation>
-    <router-view/>
-  </div>
+	<div id="app">
+		<Navigation v-if="currentUser"></Navigation>
+		
+		<b-container>
+			<router-view/>
+		</b-container>
+		
+	</div>
 </template>
 
 <script>

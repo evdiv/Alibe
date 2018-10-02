@@ -62,15 +62,18 @@ export const store = new Vuex.Store({
 			commit('setUserProfile', {})
 			commit('setJobs', null)
 		},
+
 		updateProfile ({ commit, state }, data) {
 			let name = data.name
 			let title = data.title
-	
+
+			commit('setUserProfile', {name, title})
+
 			fb.usersCollection.doc(state.currentUser.uid).update({ name, title }).then(user => {
 				// update all posts by user to reflect new name
-				fb.postsCollection.where('userId', '==', state.currentUser.uid).get().then(docs => {
+				fb.jobsCollection.where('userId', '==', state.currentUser.uid).get().then(docs => {
 					docs.forEach(doc => {
-						fb.postsCollection.doc(doc.id).update({
+						fb.jobsCollection.doc(doc.id).update({
 							userName: name
 						})
 					})

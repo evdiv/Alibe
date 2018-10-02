@@ -12,114 +12,86 @@
                 <p>Loading...</p>
         </template>
 
-        <b-row>
-            <b-col>
-                <form v-if="showForms.logIn" @submit.prevent>
-                    <h3>Welcome Back</h3>
-
-                    <b-row>
-                        <b-col sm="2"><label for="email">Email</label></b-col>
-                        <b-col sm="3">
-                            <b-form-input type="email" 
-                                        v-model.trim="loginForm.email"
-                                        placeholder="your@email.com"></b-form-input>
-                        </b-col>
-                    </b-row>
-
-                    <b-row>
-                        <b-col sm="2"><label for="password">Password</label></b-col>
-                        <b-col sm="3">
-                            <b-form-input type="password" 
-                                        v-model.trim="loginForm.password"
-                                        placeholder="********"></b-form-input>
-                        </b-col>
-                    </b-row>
-
-                    <b-row>
-                        <b-col sm="5" class="text-right">
-                            <b-button variant="success" @click="login">Log In</b-button>
-                        </b-col>
-                    </b-row>
-
-                    <b-row>
-                        <b-col>
-                            <b-button size="sm" variant="link" @click="togglePasswordResetForm">Forgot Password</b-button>
-                            <b-button size="sm" variant="link" @click="toggleSignUpForm">Create an Account</b-button>
-                        </b-col>
-                    </b-row>
-                </form>
-
-
-                <form v-if="showForms.signUp" @submit.prevent>
-                    <h3>Get Started</h3>
-
-                    <b-row>
-                        <b-col sm="2"><label for="name">Name</label></b-col>
-                        <b-col sm="3">
-                            <b-form-input type="text" 
-                                        v-model.trim="signupForm.name"
-                                        placeholder="Your name"></b-form-input>
-                        </b-col>
-                    </b-row>
-
-                    <b-row>
-                        <b-col sm="2"><label for="title">Title</label></b-col>
-                        <b-col sm="3">
-                            <b-form-input type="text" 
-                                        v-model.trim="signupForm.title"
-                                        placeholder="Title"></b-form-input>
-                        </b-col>
-                    </b-row>
-
-                    <b-row>
-                        <b-col sm="2"><label for="email">Email</label></b-col>
-                        <b-col sm="3">
-                            <b-form-input type="email" 
-                                        v-model.trim="signupForm.email"
-                                        placeholder="your@email.com"></b-form-input>
-                        </b-col>
-                    </b-row>
-
-                    <b-row>
-                        <b-col sm="2"><label for="password">Password</label></b-col>
-                        <b-col sm="3">
-                            <b-form-input type="password" 
-                                        v-model.trim="signupForm.password"
-                                        placeholder="min 6 characters"></b-form-input>
-                        </b-col>
-                    </b-row>                
-
-                    <b-row>
-                        <b-col sm="5" class="text-right">
-                            <b-button variant="success" @click="signup">Sign Up</b-button>
-                        </b-col>
-                    </b-row>
-
-                    <b-row>
-                        <b-col>
-                            <b-button size="sm" variant="link" @click="toggleLogInForm">Back to Log In</b-button>
-                        </b-col>
-                    </b-row>
-                </form>
-
-
-                <form v-if="showForms.resetPassword" @submit.prevent>
-                    <template v-if="!passwordResetSuccess">
-                        <h3>Reset Password</h3>
-                        <p>We will send you an email to reset your password</p>
-
+        <b-card bg-variant="light">
+            <b-row>
+                <b-col>
+                    <form v-if="showForms.logIn" @submit.prevent>
+                        <h3>Welcome Back</h3>
                         <b-row>
                             <b-col sm="2"><label for="email">Email</label></b-col>
                             <b-col sm="3">
                                 <b-form-input type="email" 
-                                            v-model.trim="passwordForm.email"
+                                            v-model.trim="loginForm.email"
                                             placeholder="your@email.com"></b-form-input>
                             </b-col>
                         </b-row>
 
                         <b-row>
+                            <b-col sm="2"><label for="password">Password</label></b-col>
+                            <b-col sm="3">
+                                <b-form-input type="password" 
+                                            v-model.trim="loginForm.password"
+                                            placeholder="********"></b-form-input>
+                            </b-col>
+                        </b-row>
+
+                        <b-row>
                             <b-col sm="5" class="text-right">
-                                <b-button variant="success" @click="resetPassword">Submit</b-button>
+                                <b-button variant="success" @click="login">Log In</b-button>
+                            </b-col>
+                        </b-row>
+
+                        <b-row>
+                            <b-col>
+                                <b-button size="sm" variant="link" @click="togglePasswordResetForm">Forgot Password</b-button>
+                                <b-button size="sm" variant="link" @click="toggleSignUpForm">Create an Account</b-button>
+                            </b-col>
+                        </b-row>
+                    </form>
+
+
+                    <form v-if="showForms.signUp" @submit.prevent>
+                        <h3>Get Started</h3>
+
+                        <b-row>
+                            <b-col sm="2"><label for="name">Name</label></b-col>
+                            <b-col sm="3">
+                                <b-form-input type="text" 
+                                            v-model.trim="signupForm.name"
+                                            placeholder="Your name"></b-form-input>
+                            </b-col>
+                        </b-row>
+
+                        <b-row>
+                            <b-col sm="2"><label for="title">Title</label></b-col>
+                            <b-col sm="3">
+                                <b-form-input type="text" 
+                                            v-model.trim="signupForm.title"
+                                            placeholder="Title"></b-form-input>
+                            </b-col>
+                        </b-row>
+
+                        <b-row>
+                            <b-col sm="2"><label for="email">Email</label></b-col>
+                            <b-col sm="3">
+                                <b-form-input type="email" 
+                                            v-model.trim="signupForm.email"
+                                            placeholder="your@email.com"></b-form-input>
+                            </b-col>
+                        </b-row>
+
+                        <b-row>
+                            <b-col sm="2"><label for="password">Password</label></b-col>
+                            <b-col sm="3">
+                                <b-form-input type="password" 
+                                            v-model.trim="signupForm.password"
+                                            placeholder="min 6 characters"></b-form-input>
+                            </b-col>
+                        </b-row>                
+
+                        <b-row>
+                            <b-col sm="5" class="text-right">
+                                <b-button variant="success" @click="signup">Sign Up</b-button>
                             </b-col>
                         </b-row>
 
@@ -128,27 +100,54 @@
                                 <b-button size="sm" variant="link" @click="toggleLogInForm">Back to Log In</b-button>
                             </b-col>
                         </b-row>
-                    </template>
+                    </form>
 
-                    <b-alert v-else show variant="success">
-                        <h5>Email Sent</h5>
-                        <p>check your email for a link to reset your password</p>
-                        <b-row>
-                            <b-col>
-                                <b-button size="sm" variant="link" @click="toggleLogInForm">Back to Log In</b-button>
-                            </b-col>
-                        </b-row>
+
+                    <form v-if="showForms.resetPassword" @submit.prevent>
+                        <template v-if="!passwordResetSuccess">
+                            <h3>Reset Password</h3>
+                            <p>We will send you an email to reset your password</p>
+
+                            <b-row>
+                                <b-col sm="2"><label for="email">Email</label></b-col>
+                                <b-col sm="3">
+                                    <b-form-input type="email" 
+                                                v-model.trim="passwordForm.email"
+                                                placeholder="your@email.com"></b-form-input>
+                                </b-col>
+                            </b-row>
+
+                            <b-row>
+                                <b-col sm="5" class="text-right">
+                                    <b-button variant="success" @click="resetPassword">Submit</b-button>
+                                </b-col>
+                            </b-row>
+
+                            <b-row>
+                                <b-col>
+                                    <b-button size="sm" variant="link" @click="toggleLogInForm">Back to Log In</b-button>
+                                </b-col>
+                            </b-row>
+                        </template>
+
+                        <b-alert v-else show variant="success">
+                            <h5>Email Sent</h5>
+                            <p>check your email for a link to reset your password</p>
+                            <b-row>
+                                <b-col>
+                                    <b-button size="sm" variant="link" @click="toggleLogInForm">Back to Log In</b-button>
+                                </b-col>
+                            </b-row>
+                        </b-alert>
+                    </form>
+
+                    <b-alert v-if="errorMsg !== ''" show variant="danger">
+                        {{ errorMsg }}
                     </b-alert>
-    
-                </form>
 
-
-                <b-alert v-if="errorMsg !== ''" show variant="danger">
-                    {{ errorMsg }}
-                </b-alert>
-
-            </b-col>
-        </b-row>
+                </b-col>
+            </b-row>
+        </b-card>
 
     </b-container>
 </template>

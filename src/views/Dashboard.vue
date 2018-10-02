@@ -2,25 +2,44 @@
     <b-container>
         <b-row>
             <b-col cols='5'>
-                <h4>{{ userProfile.name }} - {{ userProfile.title }}</h4>
+                <h4>{{ userProfile.name }}</h4>
+                <h6>{{ userProfile.title }}</h6>
                 
-                <form @submit.prevent>
-                    <b-form-textarea v-model.trim="job.content"
-                                    placeholder="Enter job description"
-                                    :rows="3"
-                                    :max-rows="6">
-                    </b-form-textarea>
+                <b-card bg-variant="light">
 
-                    <b-button variant="success"
-                            @click="addJob" 
-                            :disabled="job.content == ''">Add Job
-                    </b-button>
-                </form>
+                        <form @submit.prevent>
+                            <b-form-group label="Add a new job" label-size="md">
+                                <b-form-textarea v-model.trim="job.content"
+                                                placeholder="Enter job description"
+                                                :rows="3"
+                                                :max-rows="6">
+                                </b-form-textarea>
+                            </b-form-group>
+
+                            <b-form-group align="right">
+                                <b-button variant="success"
+                                        @click="addJob" 
+                                        :disabled="job.content == ''">Add Job
+                                </b-button>
+                            </b-form-group>
+                        </form>
+                </b-card>
             </b-col>
 
             <b-col cols='7'>
                 <div v-if="jobs.length">
-                    <b-table striped hover :items="jobs" :fields="fields"></b-table>
+                    <b-table striped hover :items="jobs" :fields="fields">
+                        <template slot="details" slot-scope="row">
+                            <b-button size="sm" 
+                                    @click.stop="row.toggleDetails">
+                                 {{ row.detailsShowing ? 'Hide' : 'Show'}} Details</b-button>
+                        </template>
+                        <template slot="row-details" slot-scope="row">
+                            <b-card></b-card>
+                            </template>
+
+                    </b-table>
+
 
 
                     <div v-for="job in jobs" :key=job.id class="job">
@@ -73,7 +92,6 @@
         </transition>
 
 
-
         <!-- full job modal -->
         <transition name="fade">
             <div v-if="showJobModal" class="p-modal">
@@ -89,7 +107,7 @@
                         </ul>
                     </div>
                     <div v-show="comments.length">
-                        <div v-for="comment in comments" class="comment">
+                        <div v-for="comment in comments" :key="comment.id" class="comment">
                             <p>{{ comment.userName }}</p>
                             <span>{{ comment.createdOn | formatDate }}</span>
                             <p>{{ comment.content }}</p>
@@ -97,7 +115,7 @@
                     </div>
 
                     <div v-show="offers.length" class="offers">
-                        <div v-for="offer in offers" class="offer">
+                        <div v-for="offer in offers" :key="offer.id" class="offer">
                             <p>{{ offer.userName }}</p>
                             <span>{{ offer.createdOn | formatDate }}</span>
                             <p>{{ offer.content }}</p>
@@ -118,7 +136,7 @@
     export default {
         data() {
             return {
-                fields: [ 'userName', 'content', 'comments', 'offers' ],
+                fields: [ 'userName', 'content', 'comments', 'offers', 'details'],
                 job: {
                     content: ''
                 },
