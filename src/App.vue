@@ -1,10 +1,10 @@
 <template>
 	<div id="app">
-		<Navigation v-if="currentUser"></Navigation>
-		
-		<b-container>
-			<router-view/>
-		</b-container>
+		  <Navigation v-if="currentUser"></Navigation>
+
+        <div class='container'>
+			      <router-view/>
+        </div>
 		
 	</div>
 </template>
@@ -20,3 +20,9 @@
     }
   }
 </script>
+
+<style scoped>
+    .container {
+        margin: 30px auto;
+    }
+</style>

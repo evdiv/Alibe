@@ -3,25 +3,43 @@
         <b-navbar toggleable="md" type="dark" variant="info">
             <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
-            <b-navbar-brand href="/">Alibe</b-navbar-brand>
+            <b-navbar-brand to="/">Alibe</b-navbar-brand>
 
             <b-collapse is-nav id="nav_collapse">
+     
                 <b-navbar-nav>
-                <b-nav-item href="/dashboard">Dashboard</b-nav-item>
-                <b-nav-item href="/settings">Settings</b-nav-item>
-                    <b-nav-item @click="logout">Logout</b-nav-item>
+                    <b-nav-item to="/register">Register</b-nav-item>
+                    <b-nav-item to="/jobs">Available Jobs</b-nav-item>
                 </b-navbar-nav>
-            </b-collapse>
 
+
+                <b-navbar-nav class="ml-auto">
+                    <b-nav-item-dropdown right>
+                        <template slot="button-content">
+                            <em>{{ userProfile.name }}</em>
+                        </template>
+
+                        <b-dropdown-item to="/add-job">Add Job</b-dropdown-item>
+                        <b-dropdown-item to="/settings">Profile</b-dropdown-item>
+                        <b-dropdown-item @click="logout">Signout</b-dropdown-item>
+                    </b-nav-item-dropdown>
+                </b-navbar-nav>
+
+            </b-collapse>
         </b-navbar>
+
     </b-container>
 </template>
 
 
 <script>
+    import { mapState } from 'vuex'
     const fb = require('../firebaseConfig.js')
 
     export default {
+        computed: {
+            ...mapState(['userProfile'])
+        },
         methods: {
             logout() {
                 fb.auth.signOut().then(() => {

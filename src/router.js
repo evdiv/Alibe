@@ -4,7 +4,10 @@ import firebase from 'firebase'
 
 import Login from './views/Login.vue'
 import Dashboard from './views/Dashboard.vue'
-import Settings from './views/Settings.vue'
+import JobsTable from './components/jobs-table.vue'
+import AddJob 	from './components/add-job.vue'
+import UserRegister from './components/user-register.vue'
+import UserSettings from './components/user-settings.vue'
 
 Vue.use(Router)
 
@@ -29,12 +32,33 @@ const router = new Router({
 			}
 		},
 		{
-			path: '/settings',
-			name: 'settings',
-			component: Settings,
+			path: '/jobs',
+			name: 'jobs',
+			component: JobsTable,
 			meta: {
 				requiresAuth: true
 			}
+		},
+		{
+			path: '/add-job',
+			name: 'add-job',
+			component: AddJob,
+			meta: {
+				requiresAuth: true
+			}
+		},
+		{
+			path: '/settings',
+			name: 'settings',
+			component: UserSettings,
+			meta: {
+				requiresAuth: true
+			}
+		},
+		{
+			path: '/register',
+			name: 'register',
+			component: UserRegister
 		}
   	]
 })
