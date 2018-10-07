@@ -1,10 +1,9 @@
 <template>
     <b-container>
+        
         <b-row>
             <b-col cols='5'>
-                <h4>{{ userProfile.name }}</h4>
-                <h6>{{ userProfile.title }}</h6>
-                
+ 
                 <b-card bg-variant="light">
 
                         <form @submit.prevent>
@@ -26,21 +25,14 @@
                 </b-card>
             </b-col>
 
+
+
+
+
             <b-col cols='7'>
+
                 <div v-if="jobs.length">
-                    <b-table striped hover :items="jobs" :fields="fields">
-                        <template slot="details" slot-scope="row">
-                            <b-button size="sm" 
-                                    @click.stop="row.toggleDetails">
-                                 {{ row.detailsShowing ? 'Hide' : 'Show'}} Details</b-button>
-                        </template>
-                        <template slot="row-details" slot-scope="row">
-                            <b-card></b-card>
-                            </template>
-
-                    </b-table>
-
-
+                    <b-table striped hover :items="jobs" :fields="fields"></b-table>
 
                     <div v-for="job in jobs" :key=job.id class="job">
                         <h5>{{ job.userName }}</h5>
@@ -131,12 +123,14 @@
 <script>
     import { mapState } from 'vuex'
     import moment from 'moment'
+    import jobsTable from '../components/jobs-table.vue'
+
     const fb = require('../firebaseConfig.js')
 
     export default {
         data() {
             return {
-                fields: [ 'userName', 'content', 'comments', 'offers', 'details'],
+                fields: [ 'userName', 'content', 'comments', 'offers'],
                 job: {
                     content: ''
                 },
@@ -290,6 +284,10 @@
                 if (val.length < 200) { return val }
                 return `${val.substring(0, 200)}...`
             }
+        },
+
+        components:{
+            jobsTable
         }
     }
 </script>

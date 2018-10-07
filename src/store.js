@@ -11,7 +11,6 @@ fb.auth.onAuthStateChanged(user => {
 		store.commit('setCurrentUser', user)
 		store.dispatch('fetchUserProfile')
 		
-	
 		fb.jobsCollection.orderBy('createdOn', 'desc').onSnapshot(querySnapshot => {
 			let jobs = []
 			querySnapshot.forEach(doc => {
@@ -61,34 +60,6 @@ export const store = new Vuex.Store({
 			commit('setCurrentUser', null)
 			commit('setUserProfile', {})
 			commit('setJobs', null)
-		},
-
-		updateProfile ({ commit, state }, data) {
-			let name = data.name
-			let title = data.title
-
-			commit('setUserProfile', {name, title})
-
-			fb.usersCollection.doc(state.currentUser.uid).update({ name, title }).then(user => {
-				// update all posts by user to reflect new name
-				fb.jobsCollection.where('userId', '==', state.currentUser.uid).get().then(docs => {
-					docs.forEach(doc => {
-						fb.jobsCollection.doc(doc.id).update({
-							userName: name
-						})
-					})
-				})
-				// update all comments by user to reflect new name
-				fb.commentsCollection.where('userId', '==', state.currentUser.uid).get().then(docs => {
-					docs.forEach(doc => {
-						fb.commentsCollection.doc(doc.id).update({
-							userName: name
-						})
-					})
-				})
-			}).catch(err => {
-				console.log(err)
-			})
 		}
 	}
 })
