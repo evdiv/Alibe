@@ -2,10 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import firebase from 'firebase'
 
-import Login from './views/Login.vue'
-import Dashboard from './views/Dashboard.vue'
+
 import JobsTable from './components/jobs-table.vue'
 import AddJob 	from './components/add-job.vue'
+import UserLogin from './components/user-login.vue'
 import UserRegister from './components/user-register.vue'
 import UserSettings from './components/user-settings.vue'
 
@@ -16,28 +16,22 @@ const router = new Router({
   	routes: [
     	{
       		path: '*',
-      		redirect: '/dashboard'
+      		redirect: '/jobs'
     	},
 		{
 			path: '/login',
 			name: 'login',
-			component: Login
+			component: UserLogin
 		},
 		{
-			path: '/dashboard',
-			name: 'dashboard',
-			component: Dashboard,
-			meta: {
-				requiresAuth: true
-			}
-		},
+			path: '/register',
+			name: 'register',
+			component: UserRegister
+		},		
 		{
 			path: '/jobs',
 			name: 'jobs',
 			component: JobsTable,
-			meta: {
-				requiresAuth: true
-			}
 		},
 		{
 			path: '/add-job',
@@ -54,11 +48,6 @@ const router = new Router({
 			meta: {
 				requiresAuth: true
 			}
-		},
-		{
-			path: '/register',
-			name: 'register',
-			component: UserRegister
 		}
   	]
 })

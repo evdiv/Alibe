@@ -8,12 +8,11 @@
             <b-collapse is-nav id="nav_collapse">
      
                 <b-navbar-nav>
-                    <b-nav-item to="/register">Register</b-nav-item>
                     <b-nav-item to="/jobs">Available Jobs</b-nav-item>
                 </b-navbar-nav>
 
 
-                <b-navbar-nav class="ml-auto">
+                <b-navbar-nav v-if="currentUser" class="ml-auto">
                     <b-nav-item-dropdown right>
                         <template slot="button-content">
                             <em>{{ userProfile.name }}</em>
@@ -24,6 +23,12 @@
                         <b-dropdown-item @click="logout">Signout</b-dropdown-item>
                     </b-nav-item-dropdown>
                 </b-navbar-nav>
+
+                <b-navbar-nav v-else class="ml-auto">
+                    <b-nav-item to="/login">Log In</b-nav-item>
+                    <b-nav-item to="/register">Register</b-nav-item>
+                </b-navbar-nav>
+
 
             </b-collapse>
         </b-navbar>
@@ -38,7 +43,7 @@
 
     export default {
         computed: {
-            ...mapState(['userProfile'])
+            ...mapState(['currentUser', 'userProfile'])
         },
         methods: {
             logout() {

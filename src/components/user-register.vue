@@ -4,8 +4,8 @@
             <h3>Register</h3>
             <p>For using this tool, you need to register first</p>
 
-            <b-alert v-if="showSuccess" show variant="success">
-                Your account has been created
+            <b-alert v-if="performingRequest" show variant="success">
+                <p>Loading...</p>
             </b-alert>
 
             <b-card bg-variant="light">
@@ -49,30 +49,67 @@
 
                     <b-form-group align="right">
                         <b-button variant="success" 
-                                @click="signUp">Register
+                                @click="addUser">Register
                         </b-button>
                     </b-form-group>
                 </form>
             </b-card>
+            <b-button size="sm" variant="link" to="/login">Back to LogIn</b-button>
         </b-col>
     </b-row>
 </template>
 
 <script>
+const fb = require('../firebaseConfig.js')
+
 export default {
     data() {
         return {
+            user_id: 0,
             name: '',
             title: '',
             email: '',
             description: '',
             password: '',
-            showSuccess: false
+            rating: 0,
+            performingRequest: false
         }
     },
     methods: {
-        signUp() {
+        addUser() {
+            fb.usersCollection.orderBy('createdOn', 'desc').limit(1).get().then(querySnapshot => {
+                querySnapshot.forEach(doc => {
+                    this.user_id = doc.data().user_id || 0
+                })
+                this.user_id = ++this.user_id
+                this.postUser()
 
+            }).catch(err => {
+                console.log(err)
+            })
+        },
+        postUser() {
+            this.performingRequest = true;
+            fb.auth.createUserWithEmailAndPassword(this.email, this.password).then(user => {
+                this.$store.commit('setCurrentUser', user.user)
+
+                fb.usersCollection.doc(user.user.uid).set({
+                    user_id: this.user_id,
+                    name: this.name,
+                    title: this.title,
+                    description: this.description,
+                    rating: this.rating
+
+                }).then(() => {
+                    this.$store.dispatch('fetchUserProfile')
+                    this.performingRequest = false
+                    this.$router.push('/settings')
+                }).catch(err => {
+                    console.log(err)
+                    this.performingRequest = false
+                    this.errorMsg = err.message
+                })
+            })
         }
     }
 }

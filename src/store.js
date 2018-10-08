@@ -7,20 +7,8 @@ Vue.use(Vuex)
 // initialization or page reload
 fb.auth.onAuthStateChanged(user => {
 	if (user) {
-
 		store.commit('setCurrentUser', user)
 		store.dispatch('fetchUserProfile')
-		
-		fb.jobsCollection.orderBy('createdOn', 'desc').onSnapshot(querySnapshot => {
-			let jobs = []
-			querySnapshot.forEach(doc => {
-					let job = doc.data()
-					job.id = doc.id
-					jobs.push(job)
-			})
-			store.commit('setJobs', jobs)
-		})
-
 	}
 })
 
