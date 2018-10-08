@@ -4,7 +4,8 @@ import firebase from 'firebase'
 
 
 import JobsTable from './components/jobs-table.vue'
-import AddJob 	from './components/add-job.vue'
+import JobDetails from './components/job-details.vue'
+import JobCreate 	from './components/job-create.vue'
 import UserLogin from './components/user-login.vue'
 import UserRegister from './components/user-register.vue'
 import UserSettings from './components/user-settings.vue'
@@ -34,9 +35,14 @@ const router = new Router({
 			component: JobsTable,
 		},
 		{
-			path: '/add-job',
-			name: 'add-job',
-			component: AddJob,
+			path: '/jobs/:id',
+			name: 'job-details',
+			component: JobDetails,
+		},
+		{
+			path: '/job-create',
+			name: 'job-create',
+			component: JobCreate,
 			meta: {
 				requiresAuth: true
 			}

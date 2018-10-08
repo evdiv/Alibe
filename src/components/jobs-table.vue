@@ -7,12 +7,20 @@
             <div v-if="jobs.length">
                 <b-table striped hover :items="jobs" :fields="fields">
                     <template slot="userName" slot-scope="data">
-                        <a href="#">{{ data.value }}</a>
+                        <router-link :to="'/users/' + data.item.user_id">{{ data.value }}</router-link>
                     </template>
 
                     <template slot="title" slot-scope="data">
-                        <a :href="'/jobs/' + data.item.maxBudget">{{ data.value }}</a>
+                        <router-link :to="'/jobs/' + data.item.job_id">{{ data.value }}</router-link>
                     </template>
+
+                    <template slot="createdOn" slot-scope="data">
+                        {{ data.value | formatDate }}
+                    </template>
+
+                    <template slot="maxBudget" slot-scope="data">
+                        ${{ data.value }}
+                    </template>                    
 
                 </b-table>
             </div>
@@ -41,6 +49,10 @@
                         key: 'title',
                         label: 'Job'
                     },
+                    {
+                        key: 'createdOn',
+                        label: 'Date'
+                    },                    
                     {
                         key: 'maxBudget',
                         label: 'Budget',

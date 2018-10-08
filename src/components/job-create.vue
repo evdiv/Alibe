@@ -84,7 +84,7 @@ export default {
                 title: this.title,
                 details: this.details,
                 maxBudget: this.maxBudget,
-                userId: this.currentUser.uid,
+                user_id: this.userProfile.user_id,
                 userName: this.userProfile.name,
                 comments: 0,
                 offers: 0

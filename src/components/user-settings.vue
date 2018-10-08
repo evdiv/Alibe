@@ -73,16 +73,16 @@ export default {
 			fb.usersCollection.doc(this.currentUser.uid).update({ name, title, description
             }).then(user => {
 				// update all comments by user to reflect new name
-				fb.jobsCollection.where('userId', '==', this.currentUser.uid).get().then(docs => {
-					docs.forEach(doc => {
+				fb.jobsCollection.where('userId', '==', this.currentUser.uid).get().then(querySnapshot => {
+					querySnapshot.forEach(doc => {
 						fb.jobsCollection.doc(doc.id).update({
 							userName: name
 						})
 					})
 				})
 				// update all comments by user to reflect new name
-				fb.commentsCollection.where('userId', '==', this.currentUser.uid).get().then(docs => {
-					docs.forEach(doc => {
+				fb.commentsCollection.where('userId', '==', this.currentUser.uid).get().then(querySnapshot => {
+					querySnapshot.forEach(doc => {
 						fb.commentsCollection.doc(doc.id).update({
 							userName: name
 						})
