@@ -16,12 +16,20 @@ export const store = new Vuex.Store({
 	state: {
 		currentUser: null,
 		userProfile: {},
-		jobs: []
+		jobs: [],
+		offers: [],
+		comments: []
 	},
 
 	mutations: {
 		addJob (state, val) {
 			state.jobs.push(val)
+		},
+		addOffer (state, val) {
+			state.offers.push(val)
+		},
+		addComment() {
+			state.comments.push(val)
 		},
 		setCurrentUser (state, val) {
 			state.currentUser = val
@@ -31,6 +39,12 @@ export const store = new Vuex.Store({
 		},
 		setJobs (state, val) {
 			state.jobs = val
+		},
+		setOffers (state, val) {
+			state.offers = val
+		},
+		setComments (state, val) {
+			state.comments = val
 		}
 	},
 

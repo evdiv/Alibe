@@ -2,15 +2,18 @@
     <b-row>
         <b-col cols='10' offset="1">
             <p><small><router-link to='/jobs'>All Jobs</router-link> / {{ job.title }}</small></p>
-            <h3>{{ job.title }}</h3>
+            <h3>{{ job.title }} <small>Added {{ job.createdOn | formatDate }} by 
+                    <router-link :to="'/users/' + job.user_id">{{ job.userName }}</router-link></small></h3>
             
             <b-card bg-variant="light">
                 <p>{{ job.details }}</p>
                 <p>Max Budget: ${{ job.maxBudget }}</p>
-                <p>Added {{ job.createdOn | formatDate }} by 
-                    <router-link :to="'/users/' + job.user_id">{{ job.userName }}</router-link>
-                </p>   
                 <comment-create></comment-create> 
+                
+                <hr/>
+                <offers-table></offers-table> 
+                <offer-create></offer-create> 
+
             </b-card>
                     
         </b-col>
@@ -19,6 +22,9 @@
 
 <script>
 import CommentCreate from './comment-create.vue'
+import OffersTable from './offers-table.vue'
+import OfferCreate from './offer-create.vue'
+
 const fb = require('../firebaseConfig.js')
 
 export default {
@@ -42,7 +48,9 @@ export default {
         }
     },
     components: {
-        CommentCreate
+        CommentCreate,
+        OfferCreate,
+        OffersTable
     },
     created() {
         this.getJob()
