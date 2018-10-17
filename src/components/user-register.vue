@@ -98,7 +98,8 @@ export default {
                     name: this.name,
                     title: this.title,
                     description: this.description,
-                    rating: this.rating
+                    rating: this.rating,
+                    createdOn: new Date()
 
                 }).then(() => {
                     this.$store.dispatch('fetchUserProfile')

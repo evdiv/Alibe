@@ -18,7 +18,7 @@
                             <em>{{ userProfile.name }}</em>
                         </template>
 
-                        <b-dropdown-item to="/add-job">Add Job</b-dropdown-item>
+                        <b-dropdown-item to="/job-create">Add Job</b-dropdown-item>
                         <b-dropdown-item to="/settings">Profile</b-dropdown-item>
                         <b-dropdown-item @click="logout">Signout</b-dropdown-item>
                     </b-nav-item-dropdown>
