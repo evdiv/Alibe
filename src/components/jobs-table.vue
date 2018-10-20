@@ -59,13 +59,13 @@
                         sortable: true
                     }, 
                     {
-                        key: 'comments',
-                        label: 'Comments',
-                        sortable: true
-                    },
-                    {
                         key: 'offers',
                         label: 'Offers',
+                        sortable: true
+                    },                    
+                    {
+                        key: 'comments',
+                        label: 'Comments',
                         sortable: true
                     }
                 ]  
@@ -76,7 +76,7 @@
         },
         beforeCreate() {
 
-		    fb.jobsCollection.orderBy('createdOn', 'desc').onSnapshot(querySnapshot => {
+		    fb.jobsCollection.where('active', '==', 1).orderBy('createdOn', 'desc').onSnapshot(querySnapshot => {
 			    let jobs = []
                 querySnapshot.forEach(doc => {
                         let job = doc.data()

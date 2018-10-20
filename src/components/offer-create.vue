@@ -1,16 +1,15 @@
 <template>
     <b-row>
         <b-col>
-            <h6>Add Your Offer</h6>
             <form @submit.prevent>
-                <b-form-group label="Your Offer" label-size="md">
+                <b-form-group label="Your Offer" label-size="md" v-if="showPostForm" >
                     <b-form-input v-model="amount"
                                 type="number"
                                 placeholder="Offer amount">
                     </b-form-input>
                 </b-form-group>
 
-                <b-form-group>
+                <b-form-group v-if="showPostForm" >
                     <b-form-textarea v-model="details"
                                     placeholder="Enter details of your offer"
                                     :rows="4"
@@ -19,10 +18,17 @@
                 </b-form-group>
 
                 <b-form-group align="right">
+                    <b-button variant="warning"
+                            v-if="!showPostForm" 
+                            size="sm"
+                            @click="showPostForm = true">Add Offer
+                    </b-button>
+
                     <b-button variant="success"
+                            v-if="showPostForm" 
                             size="sm"
                             @click="addOffer" 
-                            :disabled="details == ''">Add Offer
+                            :disabled="details == ''">Post Offer
                     </b-button>
                 </b-form-group>
             </form>
@@ -40,7 +46,8 @@ export default {
             job_id: parseInt(this.$route.params.id),
             details: '',
             amount: '',
-            posted: false
+            posted: false,
+            showPostForm: false
         }
     },
     computed: {
@@ -48,13 +55,16 @@ export default {
     },
     methods: {
         addOffer() {
+            this.showPostForm = false
+
             fb.offersCollection.add({
                 createdOn: new Date(),
                 job_id: this.job_id,
                 amount: this.amount, 
                 details: this.details,
                 user_id: this.userProfile.user_id,
-                userName: this.userProfile.name
+                userName: this.userProfile.name,
+                accepted: 0
             }).then(
                 fb.jobsCollection.where('job_id', '==', this.job_id).get().then(querySnapshot => {
                     querySnapshot.forEach(doc => {

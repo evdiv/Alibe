@@ -87,7 +87,8 @@ export default {
                 user_id: this.userProfile.user_id,
                 userName: this.userProfile.name,
                 comments: 0,
-                offers: 0
+                offers: 0,
+                active: 1
             }).then(ref => {
                 this.posted = true
                 this.$router.push('/jobs')

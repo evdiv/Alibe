@@ -9,6 +9,7 @@ import JobCreate 	from './components/job-create.vue'
 import UserLogin from './components/user-login.vue'
 import UserRegister from './components/user-register.vue'
 import UserSettings from './components/user-settings.vue'
+import UserDetails from './components/user-details.vue'
 
 Vue.use(Router)
 
@@ -46,6 +47,11 @@ const router = new Router({
 			meta: {
 				requiresAuth: true
 			}
+		},
+		{
+			path: '/users/:id',
+			name: 'user-details',
+			component: UserDetails,
 		},
 		{
 			path: '/settings',

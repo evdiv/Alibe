@@ -1,21 +1,29 @@
 <template>
     <b-row>
         <b-col>
-            <h6>Add comment</h6>
             <form @submit.prevent>
                 <b-form-group>
-                    <b-form-textarea v-model="details"
-                                    placeholder="Enter your comment"
-                                    :rows="3"
+                    <b-form-textarea v-model="details" 
+                                    v-if="showPostForm" 
+                                    placeholder="Enter your comment" 
+                                    :rows="3" 
                                     :max-rows="4">
                     </b-form-textarea>
                 </b-form-group>
 
                 <b-form-group align="right">
-                    <b-button variant="success"
+                    <b-button variant="warning"
+                            v-if="!showPostForm" 
+                            size="sm"
+                            @click="showPostForm = true">Add Comment
+                    </b-button>
+
+
+                    <b-button variant="success" 
+                            v-if="showPostForm" 
                             size="sm"
                             @click="addComment" 
-                            :disabled="details == ''">Add Comment
+                            :disabled="details == ''">Post Comment
                     </b-button>
                 </b-form-group>
             </form>
@@ -32,7 +40,8 @@ export default {
         return {
             job_id: parseInt(this.$route.params.id),
             details: '',
-            posted: false
+            posted: false,
+            showPostForm: false
         }
     },
     computed: {

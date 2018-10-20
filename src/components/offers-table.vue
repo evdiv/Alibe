@@ -21,7 +21,7 @@
             </div>
 
             <div v-else>
-                <h4 class="text-center">There are currently no offers</h4>
+                <h5 class="text-center text-black-50">There are currently no offers</h5>
             </div>
 
         </b-col>
@@ -35,6 +35,7 @@
     export default {
         data() {
             return {
+                job_id: parseInt(this.$route.params.id),
                 fields: [ 
                     {
                         key: 'userName',
@@ -51,21 +52,23 @@
                 ]  
             }
         },
+        methods: {
+            acceptOffer() {
+
+            }
+        },
         computed: {
             ...mapState(['offers'])
         },
-        beforeCreate() {
-
-		    fb.offersCollection.orderBy('createdOn', 'desc').onSnapshot(querySnapshot => {
+        created() {
+		    fb.offersCollection.where('job_id', '==', this.job_id).orderBy('createdOn', 'desc').onSnapshot(querySnapshot => {
                 let offers = []
                 querySnapshot.forEach(doc => {
                     let offer = doc.data()
                     offers.push(offer)
                 })
                 this.$store.commit('setOffers', offers)
-                console.log(offers)
             })
-        
         }
     }
 </script>

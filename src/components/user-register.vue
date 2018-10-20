@@ -83,7 +83,7 @@ export default {
                 })
                 this.user_id = ++this.user_id
                 this.postUser()
-
+                
             }).catch(err => {
                 console.log(err)
             })
