@@ -17,6 +17,18 @@
                         {{ data.value | formatDate }}
                     </template>
 
+                    <template slot="details" slot-scope="data">
+                        <b-button size="sm" @click.stop="data.toggleDetails">
+                            {{ data.detailsShowing ? 'Hide' : 'Show'}} Details
+                        </b-button>                        
+                    </template>
+
+                    <template slot="row-details" slot-scope="data">
+                        <b-card>
+                            {{ data.item.details }}
+                        </b-card>
+                    </template>
+                    
                     <template slot="accepted" slot-scope="data">
                         <b-button variant="success"
                             v-if="showAcceptBtn" 
@@ -60,6 +72,10 @@
                     {
                         key: 'createdOn',
                         label: 'Date'
+                    },
+                    {
+                        key: 'details',
+                        label: ''
                     },
                     {
                         key: 'accepted',
