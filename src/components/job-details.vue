@@ -11,12 +11,29 @@
                 <p>Max Budget: ${{ job.maxBudget }}</p>
 
                 <comments-list></comments-list> 
-                <comment-create></comment-create> 
+
+                <template v-if="currentUser">
+                    <comment-create></comment-create>
+                </template>
+
+               <template v-else>
+                    <div align="right">
+                        <router-link :to="'/register'"><small>Register for adding a comment</small></router-link>
+                    </div>
+               </template>     
                 
                 <hr/>
 
                 <offers-table></offers-table> 
-                <offer-create></offer-create> 
+                <template v-if="currentUser">
+                    <offer-create></offer-create> 
+                </template>
+
+               <template v-else>
+                    <div align="right">
+                        <router-link :to="'/register'"><small>Register for adding an offer</small></router-link>
+                    </div>
+               </template>  
             </b-card>
                     
         </b-col>
@@ -29,6 +46,8 @@ import CommentsList from './comments-list.vue'
 import OffersTable from './offers-table.vue'
 import OfferCreate from './offer-create.vue'
 
+import { mapState } from 'vuex'
+
 const fb = require('../firebaseConfig.js')
 
 export default {
@@ -39,11 +58,20 @@ export default {
             }
         }
     },
+    computed: {
+        ...mapState(['currentUser', 'userProfile'])
+    },
     methods: {
         getJob() {
             fb.jobsCollection.where('job_id', '==', this.job.job_id).get().then(querySnapshot => {
                 querySnapshot.forEach(doc => {
                     this.job = doc.data()
+
+                    if(this.job.user_id == this.userProfile.user_id) {
+                        this.$store.commit('setJobOwner', true)
+                    } else {
+                        this.$store.commit('setJobOwner', false)                        
+                    } 
                 })
             }).catch(err => {
                 console.log(err)

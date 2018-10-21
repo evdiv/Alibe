@@ -34,6 +34,9 @@ export const store = new Vuex.Store({
 		setCurrentUser (state, val) {
 			state.currentUser = val
 		},
+		setJobOwner (state, val) {
+			state.userProfile.jobOwner = val
+		},
 		setUserProfile (state, val) {
 			state.userProfile = val
 		},

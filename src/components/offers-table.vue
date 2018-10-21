@@ -15,7 +15,17 @@
 
                     <template slot="createdOn" slot-scope="data">
                         {{ data.value | formatDate }}
-                    </template>             
+                    </template>
+
+                    <template slot="accepted" slot-scope="data">
+                        <b-button variant="success"
+                            v-if="showAcceptBtn" 
+                            size="sm"
+                            @click="accept(data.item.key)">Accept
+                        </b-button>        
+
+                        <p class="text-success" v-if="data.value == 1">Accepted</p>
+                    </template>
 
                 </b-table>
             </div>
@@ -36,6 +46,8 @@
         data() {
             return {
                 job_id: parseInt(this.$route.params.id),
+                is_any_accepted: false,
+
                 fields: [ 
                     {
                         key: 'userName',
@@ -48,23 +60,44 @@
                     {
                         key: 'createdOn',
                         label: 'Date'
+                    },
+                    {
+                        key: 'accepted',
+                        label: ''
                     }
                 ]  
             }
         },
         methods: {
-            acceptOffer() {
-
+            accept(key) {
+                fb.offersCollection.doc(key).update({ 
+                    accepted: 1
+                
+                }).catch(err => {
+				console.log(err)
+			})
             }
         },
         computed: {
-            ...mapState(['offers'])
+            ...mapState(['userProfile', 'offers']),
+
+            showAcceptBtn() {
+                if(this.userProfile.jobOwner && !this.is_any_accepted) {
+                    return true
+                }
+                return false;
+            },
         },
         created() {
 		    fb.offersCollection.where('job_id', '==', this.job_id).orderBy('createdOn', 'desc').onSnapshot(querySnapshot => {
                 let offers = []
                 querySnapshot.forEach(doc => {
                     let offer = doc.data()
+                        offer.key = doc.id
+
+                    if(offer.accepted) {
+                        this.is_any_accepted = true;
+                    }
                     offers.push(offer)
                 })
                 this.$store.commit('setOffers', offers)
